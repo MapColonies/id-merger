@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
-  title: service-name
-  description: basic template for map colonies service
+  title: json-id-merger
+  description: merge external osm mapping with internal osm mapping
   version: 1.0.0
   license:
     name: MIT
@@ -9,33 +9,38 @@ info:
 servers:
   - url: http://localhost:8080
 paths:
-  /resourceName:
-    get:
-      operationId: getResourceName
+  /merge:
+    post:
+      operationId: merger
       tags:
-        - resourceName
-      summary: gets the resource
+        - Merger
+      summary: merger two id json to one
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonId'
       responses:
         200:
-          description: OK
+          description: Ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/resource'
-    post:
-      operationId: createResource
-      tags:
-        - resourceName
-      summary: creates a new record of type resource
-      responses:
-        201:
-          description: created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/resource'
+                $ref: '#/components/schemas/JsonIdMerged'
         400:
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        500:
+          description: Internal Server Error
           content:
             application/json:
               schema:
@@ -49,17 +54,38 @@ components:
       properties:
         message:
           type: string
-    resource:
+    JsonIdMerged:
+      type: array
+      items:
+        type: object
+        properties:
+          externalId:
+            type: string
+          osmId:
+            type: number
+    JsonId:
       type: object
       required:
-        - id
-        - name
-        - description
+        - externalMapping
+        - osmMapping
       properties:
-        id:
-          type: number
-          format: int64
-        name:
-          type: string
-        description:
-          type: string
+        externalMapping:
+          type: array
+          items:
+            type: object
+            properties:
+              tempOsmId:
+                type: number
+              externalId:
+                type: string
+            additionalProperties: false
+        osmMapping:
+          type: array
+          items:
+            type: object
+            properties:
+              tempOsmId:
+                type: number
+              osmId:
+                type: number
+            additionalProperties: false
