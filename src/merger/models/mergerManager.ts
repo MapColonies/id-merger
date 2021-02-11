@@ -20,29 +20,29 @@ interface MergedIdMapping {
   osmMapping: OsmMappingModel[];
 }
 
+function createIdMapping(mergedIdMapping: MergedIdMapping): Map<number, number> {
+  const map = new Map<number, number>();
+  mergedIdMapping.osmMapping.forEach((osmElem) => {
+    if (map.get(osmElem.tempOsmId) !== undefined) {
+      throw new Error(`Duplicate tempOsmId: ${osmElem.tempOsmId}`);
+    }
+    map.set(osmElem.tempOsmId, osmElem.osmId);
+  });
+  return map;
+}
+
 @injectable()
 export class MergeManager {
-  public merge = (jsonId: MergedIdMapping): MergedModel[] => {
-    const hash = this.createHash(jsonId);
-    const merged = jsonId.externalMapping.map((externalElm) => {
-      const osmId = hash[externalElm.tempOsmId];
+  public merge = (mergedIdMapping: MergedIdMapping): MergedModel[] => {
+    const tempIdMap = createIdMapping(mergedIdMapping);
+    const merged = mergedIdMapping.externalMapping.map((externalElm) => {
+      const osmId = tempIdMap.get(externalElm.tempOsmId);
       if (osmId === undefined) {
         throw new Error(`Can't find tempOsmId: ${externalElm.tempOsmId}`);
       }
       return { externalId: externalElm.externalId, osmId };
     });
     return merged;
-  };
-
-  private readonly createHash = (jsonId: MergedIdMapping): Partial<Record<number, number>> => {
-    const hash: Partial<Record<number, number>> = {};
-    jsonId.osmMapping.forEach((osmElem) => {
-      if (hash[osmElem.tempOsmId] !== undefined) {
-        throw new Error(`Duplicate tempOsmId: ${osmElem.tempOsmId}`);
-      }
-      hash[osmElem.tempOsmId] = osmElem.osmId;
-    });
-    return hash;
   };
 }
 
