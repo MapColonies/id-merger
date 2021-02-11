@@ -1,28 +1,28 @@
 import { injectable } from 'tsyringe';
 
-interface IExternalMappingModel {
+interface ExternalMappingModel {
   tempOsmId: number;
   externalId: string;
 }
 
-interface IOsmMappingModel {
+interface OsmMappingModel {
   tempOsmId: number;
   osmId: number;
 }
 
-interface IMergedModel {
+interface MergedModel {
   externalId: string;
   osmId: number;
 }
 
-interface IJsonId {
-  externalMapping: IExternalMappingModel[];
-  osmMapping: IOsmMappingModel[];
+interface MergedIdMapping {
+  externalMapping: ExternalMappingModel[];
+  osmMapping: OsmMappingModel[];
 }
 
 @injectable()
 export class MergeManager {
-  public merge = (jsonId: IJsonId): IMergedModel[] => {
+  public merge = (jsonId: MergedIdMapping): MergedModel[] => {
     const hash = this.createHash(jsonId);
     const merged = jsonId.externalMapping.map((externalElm) => {
       const osmId = hash[externalElm.tempOsmId];
@@ -34,7 +34,7 @@ export class MergeManager {
     return merged;
   };
 
-  private readonly createHash = (jsonId: IJsonId): Partial<Record<number, number>> => {
+  private readonly createHash = (jsonId: MergedIdMapping): Partial<Record<number, number>> => {
     const hash: Partial<Record<number, number>> = {};
     jsonId.osmMapping.forEach((osmElem) => {
       if (hash[osmElem.tempOsmId] !== undefined) {
@@ -46,4 +46,4 @@ export class MergeManager {
   };
 }
 
-export { IExternalMappingModel, IOsmMappingModel, IMergedModel, IJsonId };
+export { ExternalMappingModel, OsmMappingModel, MergedModel, MergedIdMapping };

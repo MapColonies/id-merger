@@ -1,11 +1,10 @@
 import httpStatusCodes from 'http-status-codes';
 import { container } from 'tsyringe';
-import { IMergedModel } from '../../../src/merger/models/mergerManager';
 
 import { registerTestValues } from '../testContainerConfig';
 import * as requestSender from './helpers/requestSender';
 
-describe('resourceName', function () {
+describe('merge', function () {
   beforeAll(function () {
     registerTestValues();
     requestSender.init();
@@ -66,11 +65,8 @@ describe('resourceName', function () {
       ];
       const response = await requestSender.merge(body);
 
-      expect(response.status).toBe(httpStatusCodes.OK);
-
-      const merged = response.body as IMergedModel;
-
-      expect(merged).toEqual(expected);
+      expect(response).toHaveProperty('status', httpStatusCodes.OK);
+      expect(response).toHaveProperty('body', expected);
     });
   });
 
@@ -112,11 +108,8 @@ describe('resourceName', function () {
       };
       const response = await requestSender.merge(body);
 
-      expect(response.status).toBe(httpStatusCodes.UNPROCESSABLE_ENTITY);
-
-      const merged = response.body as Error;
-
-      expect(merged.message).toEqual("Can't find tempOsmId: -4");
+      expect(response).toHaveProperty('status', httpStatusCodes.UNPROCESSABLE_ENTITY);
+      expect(response).toHaveProperty('body.message', "Can't find tempOsmId: -4");
     });
 
     it('should return 422 status code and duplicate id message', async function () {
@@ -156,11 +149,8 @@ describe('resourceName', function () {
       };
       const response = await requestSender.merge(body);
 
-      expect(response.status).toBe(httpStatusCodes.UNPROCESSABLE_ENTITY);
-
-      const merged = response.body as Error;
-
-      expect(merged.message).toEqual('Duplicate tempOsmId: -3');
+      expect(response).toHaveProperty('status', httpStatusCodes.UNPROCESSABLE_ENTITY);
+      expect(response).toHaveProperty('body.message', 'Duplicate tempOsmId: -3');
     });
   });
 });

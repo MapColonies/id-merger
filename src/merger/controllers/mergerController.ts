@@ -5,9 +5,9 @@ import { HttpError } from '@map-colonies/error-express-handler';
 import { Services } from '../../common/constants';
 import { ILogger } from '../../common/interfaces';
 
-import { IMergedModel, IJsonId, MergeManager } from '../models/mergerManager';
+import { MergedModel, MergedIdMapping, MergeManager } from '../models/mergerManager';
 
-type MergeHandler = RequestHandler<undefined, IMergedModel[], IJsonId>;
+type MergeHandler = RequestHandler<undefined, MergedModel[], MergedIdMapping>;
 
 @injectable()
 export class MergeController {

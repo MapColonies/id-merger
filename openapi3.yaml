@@ -13,20 +13,20 @@ paths:
     post:
       operationId: merger
       tags:
-        - Merger
-      summary: merger two id json to one
+        - merge
+      summary: merge external-tempId json and osmId-tempId json to external-tempId json
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/JsonId'
+              $ref: '#/components/schemas/MergedIdMapping'
       responses:
         200:
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JsonIdMerged'
+                $ref: '#/components/schemas/MappingIdMergedResponse'
         400:
           description: Bad Request
           content:
@@ -54,7 +54,7 @@ components:
       properties:
         message:
           type: string
-    JsonIdMerged:
+    MappingIdMergedResponse:
       type: array
       items:
         type: object
@@ -63,7 +63,7 @@ components:
             type: string
           osmId:
             type: number
-    JsonId:
+    MergedIdMapping:
       type: object
       required:
         - externalMapping
