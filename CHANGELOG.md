@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/MapColonies/id-merger/compare/v1.0.0...v1.1.0) (2021-05-05)
+
+
+### Features
+
+* **configurations:** added otel support of tracing and metrics ([#20](https://github.com/MapColonies/id-merger/issues/20)) ([3813907](https://github.com/MapColonies/id-merger/commit/381390760ad2fe637a219f53609da25144c08cf0))
+
+
+### Bug Fixes
+
+* **configurations:** removed servers list from openapi3.yml ([609504f](https://github.com/MapColonies/id-merger/commit/609504f4c7d4579e5c9cfdb3ebaf2cb8c84ee177))
+
 ## 1.0.0 (2021-05-03)
 
 
