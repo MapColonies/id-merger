@@ -1,6 +1,6 @@
 {
   "name": "json-id-merger",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "merge external osm mapping with internal osm mapping",
   "main": "./src/index.ts",
   "scripts": {
