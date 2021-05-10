@@ -1,47 +1,75 @@
-# Map Colonies typescript service template
+# id-merger
 
-This is a basic template for building new map colonies services in typescript.
+----------------------------------
 
-### template features:
-- eslint configuration with @map-colonies/eslint-config
-- prettier
-- jest
-- nvm configuration
-- Dockerfile
-- commitlint setup
-- git hooks
-- logger using @map-colonies/mc-logger
-- swagger ui & swagger json serve
-- config load
-- github templates
-  - bug report
-  - feature request
-  - pull request
-- github actions
-  - lint
-  - test
+![badge-alerts-lgtm](https://img.shields.io/lgtm/alerts/github/MapColonies/id-merger?style=for-the-badge)
 
-### usage:
+![grade-badge-lgtm](https://img.shields.io/lgtm/grade/javascript/github/MapColonies/id-merger?style=for-the-badge)
 
-1. copy the template files to new service repository.
-1. run `npm install `.
-1. run `npm rebuild husky` to configure commit messages linting.
-1. add the required logic for the new service:
-   - to add new routes: create an express router and connect it to express server in ServerBuilder registerControllers function. when adding handler to the router make sure to add "validate" middleware from 'openapi-express-validator' for request validation.
-   - modify the global error handler in the middleware folder to return better error responses and catch the errors before the global handler (currently it returns empty 500 response )
+![snyk](https://img.shields.io/snyk/vulnerabilities/github/MapColonies/id-merger?style=for-the-badge)
 
-### usage notes:
+----------------------------------
 
-1. when importing external dependencies from DI (such as McLogger) in class constructor the following decorator must be used to retrieve instance:
+This repo is a RESTful service for getting a matching between ids between `external-id` (external feature id) and `osm-id`, this service is part of sync workflow between external sources to OSM DB.
 
-```typescript
-@inject(delay(() => <injection token>)) <variable definition>
+## Installation
+
+Install deps with npm
+
+```bash
+npm install
 ```
 
-usage example:
+## Run Locally
 
-```typescript
-public constructor(
-    @inject(delay(() => MCLogger)) private readonly logger: MCLogger) {
-  }
+Clone the project
+
+```bash
+
+git clone https://github.com/MapColonies/id-merger.git
+
+```
+
+Go to the project directory
+
+```bash
+
+cd id-merger
+
+```
+
+Install dependencies
+
+```bash
+
+npm install
+
+```
+
+Start the server
+
+```bash
+
+npm run start
+
+```
+
+## Running Tests
+
+To run tests, run the following command
+
+```bash
+
+npm run test
+
+```
+
+To only run unit tests:
+```bash
+npm run test:unit
+```
+
+To only run integration tests:
+```bash
+npm run test:integration
 ```
