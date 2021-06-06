@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/MapColonies/id-merger/compare/v1.1.1...v1.1.2) (2021-06-06)
+
+
+### Features
+
+* **configurations:** updates openapi3 version on release ([18abcea](https://github.com/MapColonies/id-merger/commit/18abcead2c5b8b63430715d10dac62fca396ae9b))
+
+
+### Bug Fixes
+
+* **configurations:** fixed broken liveness ([#26](https://github.com/MapColonies/id-merger/issues/26)) ([b88ad75](https://github.com/MapColonies/id-merger/commit/b88ad75f347383bf9d1322e4bd3ac57a0184f798))
+* **configurations:** update and rename .versionrc ([ebb706b](https://github.com/MapColonies/id-merger/commit/ebb706be288bf45c4a6870ff6de1abbde9c965f5))
+
 ### [1.1.1](https://github.com/MapColonies/id-merger/compare/v1.1.0...v1.1.1) (2021-05-05)
 
 

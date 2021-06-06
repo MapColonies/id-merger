@@ -2,11 +2,10 @@ openapi: 3.0.1
 info:
   title: json-id-merger
   description: merge external osm mapping with internal osm mapping
-  version: 1.0.0
+  version: 1.1.2
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-
 paths:
   /merge:
     post:
@@ -20,25 +19,25 @@ paths:
             schema:
               $ref: '#/components/schemas/MergedIdMapping'
       responses:
-        200:
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/MappingIdMergedResponse'
-        400:
+        '400':
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-        422:
+        '422':
           description: Unprocessable Entity
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-        500:
+        '500':
           description: Internal Server Error
           content:
             application/json:
