@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3](https://github.com/MapColonies/id-merger/compare/v1.1.2...v1.1.3) (2021-06-07)
+
+
+### Bug Fixes
+
+* **configurations:** changed how server is initialized ([#27](https://github.com/MapColonies/id-merger/issues/27)) ([af5162a](https://github.com/MapColonies/id-merger/commit/af5162a485eb84950239d9b43707d14a2dbded56))
+
 ### [1.1.2](https://github.com/MapColonies/id-merger/compare/v1.1.1...v1.1.2) (2021-06-06)
 
 
