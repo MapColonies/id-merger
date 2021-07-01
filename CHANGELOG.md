@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/MapColonies/id-merger/compare/v1.1.3...v1.2.0) (2021-07-01)
+
+
+### Features
+
+* added traceparent header on response ([#36](https://github.com/MapColonies/id-merger/issues/36)) ([a6af72d](https://github.com/MapColonies/id-merger/commit/a6af72d188461d0b0f1a617ed3b691742e86f6b3))
+
 ### [1.1.3](https://github.com/MapColonies/id-merger/compare/v1.1.2...v1.1.3) (2021-06-07)
 
 

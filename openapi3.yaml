@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: json-id-merger
   description: merge external osm mapping with internal osm mapping
-  version: 1.1.3
+  version: 1.2.0
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
