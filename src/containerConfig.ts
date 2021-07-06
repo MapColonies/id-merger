@@ -2,6 +2,7 @@ import { container } from 'tsyringe';
 import config from 'config';
 import { logMethod, Metrics } from '@map-colonies/telemetry';
 import jsLogger, { LoggerOptions } from '@map-colonies/js-logger';
+import { trace } from '@opentelemetry/api';
 import { Services } from './common/constants';
 import { tracing } from './common/tracing';
 
@@ -16,7 +17,8 @@ function registerExternalValues(): void {
   const meter = metrics.start();
   container.register(Services.METER, { useValue: meter });
 
-  const tracer = tracing.start();
+  tracing.start();
+  const tracer = trace.getTracer('id-merger');
   container.register(Services.TRACER, { useValue: tracer });
 
   container.register('onSignal', {
