@@ -1,0 +1,46 @@
+global:
+  cloudProvider: {}
+  environment: {}
+  tracing: {}
+  metrics: {}
+
+enabled: true
+replicaCount: 1
+initialDelaySeconds: 60
+environment: development
+
+image:
+  repository: id-merger
+  tag: 'latest'
+
+cloudProvider:
+  flavor: openshift
+  dockerRegistryUrl: 'my-registry.io'
+
+env:
+  port: 8080
+  targetPort: 8080
+  protocol: TCP
+  logLevel: info
+  logPrettyPrintEnabled: false
+  responseCompressionEnabled: true
+  requestPayloadLimit: 1mb
+  tracing:
+    enabled: false
+    url: http://localhost:55681/v1/trace
+  metrics:
+    enabled: false
+    url: http://localhost:55681/v1/metrics
+resources:
+  enabled: false
+  value:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+route:
+  enabled: true
+  path: /
