@@ -18,8 +18,10 @@
       "outFiles": ["${workspaceFolder}/dist/**/*.js", "!**/node_modules/**"],
       "program": "${workspaceFolder}/src/index.ts",
       "env": {
-        "LOG_PRETTY_PRINT_ENABLED": "true",
-        "NODE_ENV": "development"
+        "LOG_PRETTY_PRINT_ENABLED": "false",
+        "NODE_ENV": "development",
+        "TELEMETRY_TRACING_ENABLED": "true",
+        "TELEMETRY_METRICS_ENABLED": "true"
       }
     }
   ]

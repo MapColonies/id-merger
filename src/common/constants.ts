@@ -9,3 +9,8 @@ export enum Services {
   TRACER = 'TRACER',
   METER = 'METER',
 }
+
+export enum TRACING {
+  APP = 'app',
+  ENTITIES = 'entities',
+}
