@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/MapColonies/id-merger/compare/v1.2.1...v1.3.0) (2021-08-25)
+
+
+### Features
+
+* **configurations:** add helm chart for service ([#33](https://github.com/MapColonies/id-merger/issues/33)) ([830498e](https://github.com/MapColonies/id-merger/commit/830498e55196019f13d0018643b1e811ce961696))
+
 ### [1.2.1](https://github.com/MapColonies/id-merger/compare/v1.2.0...v1.2.1) (2021-07-06)
 
 ## [1.2.0](https://github.com/MapColonies/id-merger/compare/v1.1.3...v1.2.0) (2021-07-01)
