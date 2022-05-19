@@ -109,7 +109,7 @@ describe('merge', function () {
       const response = await requestSender.merge(body);
 
       expect(response).toHaveProperty('status', httpStatusCodes.UNPROCESSABLE_ENTITY);
-      expect(response).toHaveProperty('body.message', "Can't find tempOsmId: -4");
+      expect(response).toHaveProperty('body.message', "can't find tempOsmId: -4");
     });
 
     it('should return 422 status code and duplicate id message', async function () {
@@ -150,7 +150,7 @@ describe('merge', function () {
       const response = await requestSender.merge(body);
 
       expect(response).toHaveProperty('status', httpStatusCodes.UNPROCESSABLE_ENTITY);
-      expect(response).toHaveProperty('body.message', 'Duplicate tempOsmId: -3');
+      expect(response).toHaveProperty('body.message', 'duplicate tempOsmId: -3');
     });
   });
 });
