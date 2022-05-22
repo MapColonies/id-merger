@@ -1,4 +1,6 @@
-import { injectable } from 'tsyringe';
+import { Logger } from '@map-colonies/js-logger';
+import { inject, injectable } from 'tsyringe';
+import { Services } from '../../common/constants';
 
 interface ExternalMappingModel {
   tempOsmId: number;
@@ -20,29 +22,50 @@ interface MergedIdMapping {
   osmMapping: OsmMappingModel[];
 }
 
-function createIdMapping(mergedIdMapping: MergedIdMapping): Map<number, number> {
-  const map = new Map<number, number>();
-  mergedIdMapping.osmMapping.forEach((osmElem) => {
-    if (map.get(osmElem.tempOsmId) !== undefined) {
-      throw new Error(`Duplicate tempOsmId: ${osmElem.tempOsmId}`);
-    }
-    map.set(osmElem.tempOsmId, osmElem.osmId);
-  });
-  return map;
-}
-
 @injectable()
 export class MergeManager {
+  public constructor(@inject(Services.LOGGER) private readonly logger: Logger) {}
+
   public merge = (mergedIdMapping: MergedIdMapping): MergedModel[] => {
-    const tempIdMap = createIdMapping(mergedIdMapping);
-    const merged = mergedIdMapping.externalMapping.map((externalElm) => {
-      const osmId = tempIdMap.get(externalElm.tempOsmId);
-      if (osmId === undefined) {
-        throw new Error(`Can't find tempOsmId: ${externalElm.tempOsmId}`);
-      }
-      return { externalId: externalElm.externalId, osmId };
+    this.logger.info({
+      msg: 'starting id merging',
+      externalIdAmount: mergedIdMapping.externalMapping.length,
+      osmIdAmount: mergedIdMapping.osmMapping.length,
     });
+
+    const osmIdToTempIdMap = this.createIdMapping(mergedIdMapping.osmMapping);
+
+    const merged = mergedIdMapping.externalMapping.map((externalElement) => {
+      const osmId = osmIdToTempIdMap.get(externalElement.tempOsmId);
+      if (osmId === undefined) {
+        this.logger.error({
+          msg: 'merge failed. could not find osmId with tempOsmId for externalId',
+          tempOsmId: externalElement.tempOsmId,
+          externalId: externalElement.externalId,
+        });
+
+        throw new Error(`can't find tempOsmId: ${externalElement.tempOsmId}`);
+      }
+
+      return { externalId: externalElement.externalId, osmId };
+    });
+
     return merged;
+  };
+
+  private readonly createIdMapping = (osmMapping: OsmMappingModel[]): Map<number, number> => {
+    const map = new Map<number, number>();
+
+    osmMapping.forEach((osmElement) => {
+      if (map.get(osmElement.tempOsmId) !== undefined) {
+        this.logger.error({ msg: 'merge failed. received duplicate tempOsmId', tempOsmId: osmElement.tempOsmId });
+
+        throw new Error(`duplicate tempOsmId: ${osmElement.tempOsmId}`);
+      }
+      map.set(osmElement.tempOsmId, osmElement.osmId);
+    });
+
+    return map;
   };
 }
 

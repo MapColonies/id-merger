@@ -1,10 +1,11 @@
+import jsLogger from '@map-colonies/js-logger';
 import { MergeManager } from '../../../../src/merger/models/mergerManager';
 
 let mergeManager: MergeManager;
 
 describe('mergeManager', () => {
   beforeEach(function () {
-    mergeManager = new MergeManager();
+    mergeManager = new MergeManager(jsLogger({ enabled: false }));
   });
   describe('#merge', () => {
     it('return the merged json', function () {
@@ -98,7 +99,7 @@ describe('mergeManager', () => {
         ],
       };
 
-      expect(() => mergeManager.merge(jsonId)).toThrow(new Error("Can't find tempOsmId: -4"));
+      expect(() => mergeManager.merge(jsonId)).toThrow(new Error("can't find tempOsmId: -4"));
     });
 
     it('throw error for duplicate tempOsmId', function () {
@@ -137,7 +138,7 @@ describe('mergeManager', () => {
         ],
       };
 
-      expect(() => mergeManager.merge(jsonId)).toThrow(new Error('Duplicate tempOsmId: -3'));
+      expect(() => mergeManager.merge(jsonId)).toThrow(new Error('duplicate tempOsmId: -3'));
     });
   });
 });
