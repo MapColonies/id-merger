@@ -13,6 +13,10 @@ metadata:
     environment: {{ include "id-merger.environment" . }}
     release: {{ $releaseName }}
     {{- include "id-merger.labels" . | nindent 4 }}
+{{- with .Values.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -28,6 +32,10 @@ spec:
         release: {{ $releaseName }}
         run: {{ $releaseName }}-{{ $chartName }}
         {{- include "id-merger.selectorLabels" . | nindent 8 }}
+{{- with .Values.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
       containers:
         - name: {{ $releaseName }}-{{ $chartName }}-deployment
