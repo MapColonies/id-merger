@@ -12,6 +12,7 @@ environment: development
 image:
   repository: id-merger
   # tag: 'latest'
+  pullPolicy: Always
 
 annotations: {}
 podAnnotations: {}
@@ -25,7 +26,6 @@ env:
   targetPort: 8080
   protocol: TCP
   logLevel: info
-  logPrettyPrintEnabled: false
   responseCompressionEnabled: true
   requestPayloadLimit: 1mb
   tracing:
@@ -47,4 +47,6 @@ resources:
 
 route:
   enabled: true
+  tls:
+    termination: edge
   path: /
