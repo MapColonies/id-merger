@@ -8,9 +8,9 @@ metadata:
     title: Confluence 
     icon: article
   tags: 
-    - Nodejs
-    - TypeScript
-    - Expressjs
+    - nodejs
+    - typescript
+    - expressjs
   annotations:
     github.com/project-slug: MapColonies/id-merger
 spec:
