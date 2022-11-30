@@ -2,11 +2,15 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: id-merger
-  description: Matches between external ID (external feature ID) and OSM ID
+  description: Matches between external ID (external feature ID), Temporary OSM ID and OSM ID
   links:
   - url: https://mapcolonies.atlassian.net/wiki/spaces/MAPConflicResolution/pages/1353613504/Ingestion#Details-about-our-services
     title: Confluence 
     icon: article
+  tags: 
+    - Node.js
+    - TypeScript
+    - Express.js
   annotations:
     github.com/project-slug: MapColonies/id-merger
 spec:
@@ -21,7 +25,7 @@ apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
   name: id-merger-api
-  description: An API for for merging external OSM mapping with internal OSM mapping
+  description: An API for for merging external ID to OSM ID by using Temporary OSM ID
 spec:
   type: openapi
   lifecycle: production
