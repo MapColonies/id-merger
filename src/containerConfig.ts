@@ -1,7 +1,7 @@
 import config from 'config';
 import { getOtelMixin, Metrics } from '@map-colonies/telemetry';
 import jsLogger, { LoggerOptions } from '@map-colonies/js-logger';
-import { trace } from '@opentelemetry/api';
+import { trace, metrics as OtelMetrics } from '@opentelemetry/api';
 import { DependencyContainer } from 'tsyringe/dist/typings/types';
 import { metrics } from '@opentelemetry/api-metrics';
 import { SERVICES, SERVICE_NAME } from './common/constants';
@@ -18,8 +18,8 @@ export const registerExternalValues = (options?: RegisterOptions): DependencyCon
   const loggerConfig = config.get<LoggerOptions>('telemetry.logger');
   const logger = jsLogger({ ...loggerConfig, prettyPrint: loggerConfig.prettyPrint, mixin: getOtelMixin() });
 
-  const otelMetrics = new Metrics();
-  otelMetrics.start();
+  const metrics = new Metrics();
+  metrics.start();
 
   const tracer = trace.getTracer(SERVICE_NAME);
 
@@ -27,14 +27,14 @@ export const registerExternalValues = (options?: RegisterOptions): DependencyCon
     { token: SERVICES.CONFIG, provider: { useValue: config } },
     { token: SERVICES.LOGGER, provider: { useValue: logger } },
     { token: SERVICES.TRACER, provider: { useValue: tracer } },
-    { token: SERVICES.METER, provider: { useValue: metrics.getMeter(SERVICE_NAME) } },
+    { token: SERVICES.METER, provider: { useValue: OtelMetrics.getMeterProvider().getMeter(SERVICE_NAME) } },
     { token: MERGE_ROUTER_SYMBOL, provider: { useFactory: mergeRouterFactory } },
     {
       token: 'onSignal',
       provider: {
         useValue: {
           useValue: async (): Promise<void> => {
-            await Promise.all([tracing.stop(), otelMetrics.stop()]);
+            await Promise.all([tracing.stop(), metrics.stop()]);
           },
         },
       },
