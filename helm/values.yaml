@@ -8,6 +8,7 @@ enabled: true
 replicaCount: 1
 initialDelaySeconds: 60
 environment: development
+resetOnConfigChange: true
 
 image:
   repository: id-merger
