@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import { Logger } from '@map-colonies/js-logger';
@@ -6,17 +6,21 @@ import httpLogger from '@map-colonies/express-access-log-middleware';
 import { getErrorHandlerMiddleware } from '@map-colonies/error-express-handler';
 import { OpenapiViewerRouter, OpenapiRouterConfig } from '@map-colonies/openapi-express-viewer';
 import { middleware as OpenApiMiddleware } from 'express-openapi-validator';
-import { container, inject, injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 import { defaultMetricsMiddleware, getTraceContexHeaderMiddleware } from '@map-colonies/telemetry';
 import { Services } from './common/constants';
 import { IConfig } from './common/interfaces';
-import { mergeRouterFactory } from './merger/routes/mergerRouter';
+import { MERGE_ROUTER_SYMBOL } from './merger/routes/mergerRouter';
 
 @injectable()
 export class ServerBuilder {
   private readonly serverInstance: express.Application;
 
-  public constructor(@inject(Services.CONFIG) private readonly config: IConfig, @inject(Services.LOGGER) private readonly logger: Logger) {
+  public constructor(
+    @inject(Services.CONFIG) private readonly config: IConfig,
+    @inject(Services.LOGGER) private readonly logger: Logger,
+    @inject(MERGE_ROUTER_SYMBOL) private readonly mergerRouter: Router
+  ) {
     this.serverInstance = express();
   }
 
@@ -29,7 +33,7 @@ export class ServerBuilder {
   }
 
   private buildRoutes(): void {
-    this.serverInstance.use('/merge', mergeRouterFactory(container));
+    this.serverInstance.use('/merge', this.mergerRouter);
     this.buildDocsRoutes();
   }
 

@@ -11,4 +11,6 @@ const mergeRouterFactory: FactoryFunction<Router> = (dependencyContainer) => {
   return router;
 };
 
+export const MERGE_ROUTER_SYMBOL = Symbol('mergeRouterFactory');
+
 export { mergeRouterFactory };

@@ -1,30 +1,44 @@
-import { container } from 'tsyringe';
 import config from 'config';
 import { getOtelMixin, Metrics } from '@map-colonies/telemetry';
 import jsLogger, { LoggerOptions } from '@map-colonies/js-logger';
 import { trace } from '@opentelemetry/api';
+import { DependencyContainer } from 'tsyringe/dist/typings/types';
 import { metrics } from '@opentelemetry/api-metrics';
 import { Services, SERVICE_NAME } from './common/constants';
 import { tracing } from './common/tracing';
+import { mergeRouterFactory, MERGE_ROUTER_SYMBOL } from './merger/routes/mergerRouter';
+import { InjectionObject, registerDependencies } from './common/dependencyRegistration';
 
-function registerExternalValues(): void {
+export interface RegisterOptions {
+  override?: InjectionObject<unknown>[];
+  useChild?: boolean;
+}
+
+export const registerExternalValues = (options?: RegisterOptions): DependencyContainer => {
   const loggerConfig = config.get<LoggerOptions>('telemetry.logger');
   const logger = jsLogger({ ...loggerConfig, prettyPrint: loggerConfig.prettyPrint, mixin: getOtelMixin() });
-  container.register(Services.CONFIG, { useValue: config });
-  container.register(Services.LOGGER, { useValue: logger });
 
   const otelMetrics = new Metrics();
   otelMetrics.start();
-  container.register(Services.METER, { useValue: metrics.getMeter(SERVICE_NAME) });
 
   const tracer = trace.getTracer(SERVICE_NAME);
-  container.register(Services.TRACER, { useValue: tracer });
 
-  container.register('onSignal', {
-    useValue: async (): Promise<void> => {
-      await Promise.all([tracing.stop(), otelMetrics.stop()]);
+  const dependencies: InjectionObject<unknown>[] = [
+    { token: Services.CONFIG, provider: { useValue: config } },
+    { token: Services.LOGGER, provider: { useValue: logger } },
+    { token: Services.TRACER, provider: { useValue: tracer } },
+    { token: Services.METER, provider: { useValue: metrics.getMeter(SERVICE_NAME) } },
+    { token: MERGE_ROUTER_SYMBOL, provider: { useFactory: mergeRouterFactory } },
+    {
+      token: 'onSignal',
+      provider: {
+        useValue: {
+          useValue: async (): Promise<void> => {
+            await Promise.all([tracing.stop(), otelMetrics.stop()]);
+          },
+        },
+      },
     },
-  });
-}
-
-export { registerExternalValues };
+  ];
+  return registerDependencies(dependencies, options?.override, options?.useChild);
+};
