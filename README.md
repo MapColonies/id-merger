@@ -20,6 +20,11 @@ Install deps with npm
 npm install
 ```
 
+### Install Git Hooks
+```bash
+npx husky install
+```
+
 ## Run Locally
 
 Clone the project
