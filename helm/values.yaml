@@ -22,6 +22,9 @@ cloudProvider:
   imagePullSecretName: 'my-registry-secret'
   dockerRegistryUrl: 'my-registry.io'
 
+caSecretName: ''
+caKey: 'ca.crt'
+
 env:
   port: 8080
   targetPort: 8080
