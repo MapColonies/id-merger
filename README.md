@@ -2,14 +2,6 @@
 
 ----------------------------------
 
-![badge-alerts-lgtm](https://img.shields.io/lgtm/alerts/github/MapColonies/id-merger?style=for-the-badge)
-
-![grade-badge-lgtm](https://img.shields.io/lgtm/grade/javascript/github/MapColonies/id-merger?style=for-the-badge)
-
-![snyk](https://img.shields.io/snyk/vulnerabilities/github/MapColonies/id-merger?style=for-the-badge)
-
-----------------------------------
-
 This repo is a RESTful service for getting a matching between ids between `external-id` (external feature id) and `osm-id`, this service is part of sync workflow between external sources to OSM DB.
 
 ## Installation
