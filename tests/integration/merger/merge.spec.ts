@@ -5,7 +5,7 @@ import { registerTestValues } from '../testContainerConfig';
 import * as requestSender from './helpers/requestSender';
 
 describe('merge', function () {
-  beforeAll(function () {
+  beforeEach(function () {
     registerTestValues();
     requestSender.init();
   });
