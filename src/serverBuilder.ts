@@ -8,7 +8,7 @@ import { OpenapiViewerRouter, OpenapiRouterConfig } from '@map-colonies/openapi-
 import { middleware as OpenApiMiddleware } from 'express-openapi-validator';
 import { inject, injectable } from 'tsyringe';
 import { defaultMetricsMiddleware, getTraceContexHeaderMiddleware } from '@map-colonies/telemetry';
-import { Services } from './common/constants';
+import { SERVICES } from './common/constants';
 import { IConfig } from './common/interfaces';
 import { MERGE_ROUTER_SYMBOL } from './merger/routes/mergerRouter';
 
@@ -17,8 +17,8 @@ export class ServerBuilder {
   private readonly serverInstance: express.Application;
 
   public constructor(
-    @inject(Services.CONFIG) private readonly config: IConfig,
-    @inject(Services.LOGGER) private readonly logger: Logger,
+    @inject(SERVICES.CONFIG) private readonly config: IConfig,
+    @inject(SERVICES.LOGGER) private readonly logger: Logger,
     @inject(MERGE_ROUTER_SYMBOL) private readonly mergerRouter: Router
   ) {
     this.serverInstance = express();
