@@ -4,10 +4,10 @@ metadata:
   name: id-merger
   description: Matches between external ID (external feature ID), Temporary OSM ID and OSM ID
   links:
-  - url: https://mapcolonies.atlassian.net/wiki/spaces/MAPConflicResolution/pages/1353613504/Ingestion#Details-about-our-services
-    title: Confluence 
-    icon: article
-  tags: 
+    - url: https://mapcolonies.atlassian.net/wiki/spaces/MAPConflicResolution/pages/1353613504/Ingestion#Details-about-our-services
+      title: Confluence
+      icon: article
+  tags:
     - nodejs
     - typescript
     - expressjs
