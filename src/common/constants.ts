@@ -14,12 +14,3 @@ export const SERVICES: Record<string, symbol> = {
   METER: Symbol('Meter'),
 };
 /* eslint-enable @typescript-eslint/naming-convention */
-
-// export const SERVICE_NAME = 'id-merger';
-
-// export enum Services {
-//   LOGGER = 'ILogger',
-//   CONFIG = 'IConfig',
-//   TRACER = 'TRACER',
-//   METER = 'METER',
-// }
