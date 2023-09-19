@@ -1,16 +1,23 @@
+import jsLogger from '@map-colonies/js-logger';
+import { trace } from '@opentelemetry/api';
+import client from 'prom-client';
 import httpStatusCodes from 'http-status-codes';
-import { container } from 'tsyringe';
-
-import { registerTestValues } from '../testContainerConfig';
-import * as requestSender from './helpers/requestSender';
+import { getApp } from '../../../src/app';
+import { SERVICES, METRICS_REGISTRY } from '../../../src/common/constants';
+import { MergerRequestSender } from './helpers/requestSender';
 
 describe('merge', function () {
-  beforeAll(function () {
-    registerTestValues();
-    requestSender.init();
-  });
-  afterEach(function () {
-    container.clearInstances();
+  let requestSender: MergerRequestSender;
+  beforeEach(function () {
+    const app = getApp({
+      override: [
+        { token: SERVICES.LOGGER, provider: { useValue: jsLogger({ enabled: false }) } },
+        { token: SERVICES.TRACER, provider: { useValue: trace.getTracer('testTracer') } },
+        { token: METRICS_REGISTRY, provider: { useValue: new client.Registry() } },
+      ],
+      useChild: true,
+    });
+    requestSender = new MergerRequestSender(app);
   });
 
   describe('Happy Path', function () {

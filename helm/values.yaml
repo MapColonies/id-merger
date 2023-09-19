@@ -8,6 +8,7 @@ enabled: true
 replicaCount: 1
 initialDelaySeconds: 60
 environment: development
+resetOnConfigChange: true
 
 image:
   repository: id-merger
@@ -19,13 +20,19 @@ podAnnotations: {}
 
 cloudProvider:
   flavor: openshift
+  imagePullSecretName: 'my-registry-secret'
   dockerRegistryUrl: 'my-registry.io'
+
+caSecretName: ''
+caPath: '/usr/local/share/ca-certificates'
+caKey: 'ca.crt'
 
 env:
   port: 8080
   targetPort: 8080
   protocol: TCP
   logLevel: info
+  projectName: default
   responseCompressionEnabled: true
   requestPayloadLimit: 1mb
   tracing:
@@ -36,7 +43,7 @@ env:
     enabled: false
     url: http://localhost:55681/v1/metrics
 resources:
-  enabled: false
+  enabled: true
   value:
     limits:
       cpu: 100m
@@ -50,3 +57,6 @@ route:
   tls:
     termination: edge
   path: /
+  timeout:
+    enabled: false # defaults to 30s by openshift
+    duration: 60s # supported units (us, ms, s, m, h, d)

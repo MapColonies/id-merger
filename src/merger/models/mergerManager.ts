@@ -1,6 +1,7 @@
+import client from 'prom-client';
 import { Logger } from '@map-colonies/js-logger';
 import { inject, injectable } from 'tsyringe';
-import { Services } from '../../common/constants';
+import { SERVICES, METRICS_REGISTRY } from '../../common/constants';
 
 interface ExternalMappingModel {
   tempOsmId: number;
@@ -24,7 +25,16 @@ interface MergedIdMapping {
 
 @injectable()
 export class MergeManager {
-  public constructor(@inject(Services.LOGGER) private readonly logger: Logger) {}
+  private readonly mergeCounter: client.Counter<'status' | 'osmid'>;
+
+  public constructor(@inject(SERVICES.LOGGER) private readonly logger: Logger, @inject(METRICS_REGISTRY) registry: client.Registry) {
+    this.mergeCounter = new client.Counter({
+      name: 'merge_count',
+      help: 'The overall merge stats',
+      labelNames: ['status', 'osmid'] as const,
+      registers: [registry],
+    });
+  }
 
   public merge = (mergedIdMapping: MergedIdMapping): MergedModel[] => {
     this.logger.info({
@@ -43,10 +53,10 @@ export class MergeManager {
           tempOsmId: externalElement.tempOsmId,
           externalId: externalElement.externalId,
         });
-
+        this.mergeCounter.inc({ status: 'failed', osmid: osmId });
         throw new Error(`can't find tempOsmId: ${externalElement.tempOsmId}`);
       }
-
+      this.mergeCounter.inc({ status: 'completed', osmid: osmId });
       return { externalId: externalElement.externalId, osmId };
     });
 

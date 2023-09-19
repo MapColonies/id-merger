@@ -1,3 +1,4 @@
+import client from 'prom-client';
 import jsLogger from '@map-colonies/js-logger';
 import { MergeManager } from '../../../../src/merger/models/mergerManager';
 
@@ -5,7 +6,7 @@ let mergeManager: MergeManager;
 
 describe('mergeManager', () => {
   beforeEach(function () {
-    mergeManager = new MergeManager(jsLogger({ enabled: false }));
+    mergeManager = new MergeManager(jsLogger({ enabled: false }), new client.Registry());
   });
   describe('#merge', () => {
     it('return the merged json', function () {

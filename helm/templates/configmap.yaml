@@ -20,5 +20,5 @@ data:
   TELEMETRY_METRICS_ENABLED: 'true'
   TELEMETRY_METRICS_URL: {{ $metricsUrl }}
   {{ end }}
-  LOG_LEVEL: {{ .Values.env.logLevel | quote }}
+  npm_config_cache: /tmp/
 {{- end }}

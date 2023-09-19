@@ -5,7 +5,6 @@ tests
 coverage
 node_modules
 .prettier*
-commitlint.config.json
 README.md
 .npmrc
 .redocly.yaml

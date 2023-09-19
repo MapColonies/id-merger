@@ -3,7 +3,7 @@ import httpStatus from 'http-status-codes';
 import { injectable, inject } from 'tsyringe';
 import { Logger } from '@map-colonies/js-logger';
 import { HttpError } from '@map-colonies/error-express-handler';
-import { Services } from '../../common/constants';
+import { SERVICES } from '../../common/constants';
 
 import { MergedModel, MergedIdMapping, MergeManager } from '../models/mergerManager';
 
@@ -11,7 +11,7 @@ type MergeHandler = RequestHandler<undefined, MergedModel[], MergedIdMapping>;
 
 @injectable()
 export class MergeController {
-  public constructor(@inject(Services.LOGGER) private readonly logger: Logger, @inject(MergeManager) private readonly manager: MergeManager) {}
+  public constructor(@inject(SERVICES.LOGGER) private readonly logger: Logger, @inject(MergeManager) private readonly manager: MergeManager) {}
   public merge: MergeHandler = (req, res) => {
     let result;
     try {
