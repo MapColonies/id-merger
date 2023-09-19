@@ -1,14 +1,15 @@
 import express, { Router } from 'express';
+import { Registry } from 'prom-client';
 import bodyParser from 'body-parser';
 import compression from 'compression';
-import { Logger } from '@map-colonies/js-logger';
-import httpLogger from '@map-colonies/express-access-log-middleware';
 import { getErrorHandlerMiddleware } from '@map-colonies/error-express-handler';
 import { OpenapiViewerRouter, OpenapiRouterConfig } from '@map-colonies/openapi-express-viewer';
 import { middleware as OpenApiMiddleware } from 'express-openapi-validator';
 import { inject, injectable } from 'tsyringe';
-import { defaultMetricsMiddleware, getTraceContexHeaderMiddleware } from '@map-colonies/telemetry';
-import { SERVICES } from './common/constants';
+import { Logger } from '@map-colonies/js-logger';
+import httpLogger from '@map-colonies/express-access-log-middleware';
+import { getTraceContexHeaderMiddleware, metricsMiddleware } from '@map-colonies/telemetry';
+import { SERVICES, METRICS_REGISTRY } from './common/constants';
 import { IConfig } from './common/interfaces';
 import { MERGE_ROUTER_SYMBOL } from './merger/routes/mergerRouter';
 
@@ -19,7 +20,8 @@ export class ServerBuilder {
   public constructor(
     @inject(SERVICES.CONFIG) private readonly config: IConfig,
     @inject(SERVICES.LOGGER) private readonly logger: Logger,
-    @inject(MERGE_ROUTER_SYMBOL) private readonly mergerRouter: Router
+    @inject(MERGE_ROUTER_SYMBOL) private readonly mergerRouter: Router,
+    @inject(METRICS_REGISTRY) private readonly metricsRegistry?: Registry
   ) {
     this.serverInstance = express();
   }
@@ -47,7 +49,9 @@ export class ServerBuilder {
   }
 
   private registerPreRoutesMiddleware(): void {
-    this.serverInstance.use('/metrics', defaultMetricsMiddleware());
+    if (this.metricsRegistry) {
+      this.serverInstance.use('/metrics', metricsMiddleware(this.metricsRegistry));
+    }
 
     if (this.config.get<boolean>('server.response.compression.enabled')) {
       this.serverInstance.use(compression(this.config.get<compression.CompressionFilter>('server.response.compression.options')));
