@@ -1,8 +1,14 @@
+const { pathsToModuleNameMapper } = require('ts-jest');
+const { compilerOptions } = require('../../../tsconfig.json');
+
+/** @type {import('jest').Config} */
 module.exports = {
   transform: {
-    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.ts$': ['@swc/jest'],
   },
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
   testMatch: ['<rootDir>/tests/unit/**/*.spec.ts'],
+  coverageReporters: ['text', 'html'],
   collectCoverage: true,
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
@@ -14,14 +20,12 @@ module.exports = {
     '!<rootDir>/src/*',
   ],
   coverageDirectory: '<rootDir>/coverage',
-  coverageReporters: ['text', 'html'],
   reporters: [
     'default',
     ['jest-html-reporters', { multipleReportsUnitePath: './reports', pageTitle: 'unit', publicPath: './reports', filename: 'unit.html' }],
   ],
   rootDir: '../../../.',
-  setupFiles: ['<rootDir>/tests/configurations/jest.setup.js'],
-  preset: 'ts-jest',
+  setupFiles: ['<rootDir>/tests/configurations/jest.setup.ts'],
   testEnvironment: 'node',
   coverageThreshold: {
     global: {
