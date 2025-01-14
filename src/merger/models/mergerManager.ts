@@ -1,6 +1,6 @@
 import { Logger } from '@map-colonies/js-logger';
 import { inject, injectable } from 'tsyringe';
-import { Services } from '../../common/constants';
+import { SERVICES } from '../../common/constants';
 
 interface ExternalMappingModel {
   tempOsmId: number;
@@ -24,7 +24,7 @@ interface MergedIdMapping {
 
 @injectable()
 export class MergeManager {
-  public constructor(@inject(Services.LOGGER) private readonly logger: Logger) {}
+  public constructor(@inject(SERVICES.LOGGER) private readonly logger: Logger) {}
 
   public merge = (mergedIdMapping: MergedIdMapping): MergedModel[] => {
     this.logger.info({
