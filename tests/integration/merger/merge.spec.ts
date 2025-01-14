@@ -1,16 +1,38 @@
 import httpStatusCodes from 'http-status-codes';
-import { container } from 'tsyringe';
-
-import { registerTestValues } from '../testContainerConfig';
-import * as requestSender from './helpers/requestSender';
+import { SERVICES } from '@src/common/constants';
+import jsLogger from '@map-colonies/js-logger';
+import { trace } from '@opentelemetry/api';
+import { createRequestSender, RequestSender } from '@map-colonies/openapi-helpers/requestSender';
+import { operations, paths } from '@src/openapi';
+import { getApp } from '@src/app';
+import { ConfigType, getConfig, initConfig } from '@src/common/config';
 
 describe('merge', function () {
-  beforeAll(function () {
-    registerTestValues();
-    requestSender.init();
-  });
-  afterEach(function () {
-    container.clearInstances();
+  let configInstance: ConfigType;
+  let requestSender: RequestSender<paths, operations>;
+
+  beforeAll(async function () {
+    await initConfig(true);
+    configInstance = getConfig();
+
+    const [app] = await getApp({
+      override: [
+        {
+          token: SERVICES.CONFIG,
+          provider: { useValue: configInstance },
+        },
+        { token: SERVICES.LOGGER, provider: { useValue: jsLogger({ enabled: false }) } },
+        {
+          token: SERVICES.TRACER,
+          provider: {
+            useValue: trace.getTracer('test-tracer'),
+          },
+        },
+      ],
+      useChild: true,
+    });
+
+    requestSender = await createRequestSender<paths, operations>('openapi3.yaml', app);
   });
 
   describe('Happy Path', function () {
@@ -63,7 +85,10 @@ describe('merge', function () {
           osmId: 3,
         },
       ];
-      const response = await requestSender.merge(body);
+
+      const response = await requestSender.merger({
+        requestBody: body,
+      });
 
       expect(response).toHaveProperty('status', httpStatusCodes.OK);
       expect(response).toHaveProperty('body', expected);
@@ -106,7 +131,9 @@ describe('merge', function () {
           },
         ],
       };
-      const response = await requestSender.merge(body);
+      const response = await requestSender.merger({
+        requestBody: body,
+      });
 
       expect(response).toHaveProperty('status', httpStatusCodes.UNPROCESSABLE_ENTITY);
       expect(response).toHaveProperty('body.message', "can't find tempOsmId: -4");
@@ -147,7 +174,9 @@ describe('merge', function () {
           },
         ],
       };
-      const response = await requestSender.merge(body);
+      const response = await requestSender.merger({
+        requestBody: body,
+      });
 
       expect(response).toHaveProperty('status', httpStatusCodes.UNPROCESSABLE_ENTITY);
       expect(response).toHaveProperty('body.message', 'duplicate tempOsmId: -3');
