@@ -5,22 +5,13 @@ import { trace } from '@opentelemetry/api';
 import { createRequestSender, RequestSender } from '@map-colonies/openapi-helpers/requestSender';
 import { operations, paths } from '@src/openapi';
 import { getApp } from '@src/app';
-import { ConfigType, getConfig, initConfig } from '@src/common/config';
 
 describe('merge', function () {
-  let configInstance: ConfigType;
   let requestSender: RequestSender<paths, operations>;
 
   beforeAll(async function () {
-    await initConfig(true);
-    configInstance = getConfig();
-
     const [app] = await getApp({
       override: [
-        {
-          token: SERVICES.CONFIG,
-          provider: { useValue: configInstance },
-        },
         { token: SERVICES.LOGGER, provider: { useValue: jsLogger({ enabled: false }) } },
         {
           token: SERVICES.TRACER,
